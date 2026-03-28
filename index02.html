@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escala Completa Abril 2026 — EdyMichaelCover</title>
+
+<style>
+:root{
+--bg:#060606;
+--panel:#111;
+--gold:#d4af37;
+--line:rgba(212,175,55,.3);
+--text:#f5f2ea;
+--hl:#fff200;
+}
+
+body{
+margin:0;
+font-family:Arial;
+background:var(--bg);
+color:var(--text);
+padding:15px;
+}
+
+h1{
+text-align:center;
+color:var(--gold);
+}
+
+.wrap{
+max-width:1400px;
+margin:auto;
+background:var(--panel);
+padding:15px;
+border-radius:10px;
+border:1px solid var(--line);
+}
+
+button{
+background:var(--gold);
+border:none;
+padding:8px 12px;
+margin:5px;
+cursor:pointer;
+font-weight:bold;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+border:1px solid var(--line);
+padding:6px;
+text-align:center;
+font-size:13px;
+}
+
+th{background:#000;color:var(--gold)}
+
+input,select{
+width:100%;
+padding:4px;
+background:#000;
+color:#fff;
+border:1px solid var(--gold);
+}
+
+.mj{background:#0f2;color:#000;font-weight:bold}
+.queen{background:#00e0ff;color:#000;font-weight:bold}
+.evento{background:var(--hl);color:#000;font-weight:bold}
+
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<h1>Escala Completa Abril 2026</h1>
+
+<button onclick="window.print()">📄 Gerar PDF</button>
+<button onclick="salvar()">💾 Salvar</button>
+
+<table>
+<thead>
+<tr>
+<th>DATA</th>
+<th>DIA</th>
+<th>ATRAÇÃO</th>
+<th>POCKET</th>
+<th>DANÇARINO 1</th>
+<th>DANÇARINO 2</th>
+</tr>
+</thead>
+<tbody id="tabela">
+
+<!-- LINHAS -->
+
+<script>
+const dias = [
+['01/04','QUA','Beatles','Amy'],
+['02/04','QUI','Elvis','Freddie'],
+['03/04','SEX','Rock 80','MJ'],
+['04/04','SAB','Rock','Freddie'],
+['05/04','DOM','Elton','Freddie'],
+['06/04','SEG','Freddie Verso','MJ'],
+['07/04','TER','Amy','MJ'],
+['08/04','QUA','Beatles','Amy'],
+['09/04','QUI','Elvis','Freddie'],
+['10/04','SEX','Rock 80','MJ'],
+['11/04','SAB','Rock','MJ'],
+['12/04','DOM','Elton','MJ'],
+['13/04','SEG','Freddie Verso','MJ'],
+['14/04','TER','Amy','MJ'],
+['15/04','QUA','Beatles','Amy'],
+['16/04','QUI','Rolling Stones','Queen'],
+['17/04','SEX','Rock 80','MJ'],
+['18/04','SAB','Rock','MJ'],
+['19/04','DOM','Elton','MJ'],
+['20/04','SEG','Freddie Verso','MJ'],
+['21/04','TER','Amy','MJ'],
+['22/04','QUA','Beatles','Amy'],
+['23/04','QUI','Elvis','Queen'],
+['24/04','SEX','ESPECIAL MJ','MJ'],
+['25/04','SAB','Rock','Queen'],
+['26/04','DOM','Elton','Freddie'],
+['27/04','SEG','Freddie Verso','MJ'],
+['28/04','TER','Amy','MJ'],
+['29/04','QUA','Beatles','Amy'],
+['30/04','QUI','Rita Lee','Freddie']
+];
+
+const nomes = ['Jhonny','Patrick','Abizael','Renan'];
+
+const tabela = document.getElementById('tabela');
+
+function criarSelect(){
+let s = document.createElement('select');
+nomes.forEach(n=>{
+let op = document.createElement('option');
+op.value=n;
+op.textContent=n;
+s.appendChild(op);
+});
+return s;
+}
+
+function classePocket(p){
+if(p==='MJ') return 'mj';
+if(p==='Queen') return 'queen';
+return '';
+}
+
+// CRIAR LINHAS
+dias.forEach(d=>{
+let tr = document.createElement('tr');
+
+tr.innerHTML = `
+<td>${d[0]}</td>
+<td>${d[1]}</td>
+<td class="${d[2].includes('Rolling')||d[2].includes('Rita')?'evento':''}">${d[2]}</td>
+<td class="${classePocket(d[3])}">${d[3]}</td>
+`;
+
+let td1 = document.createElement('td');
+let td2 = document.createElement('td');
+
+td1.appendChild(criarSelect());
+td2.appendChild(criarSelect());
+
+tr.appendChild(td1);
+tr.appendChild(td2);
+
+tabela.appendChild(tr);
+});
+
+function salvar(){
+let dados=[];
+document.querySelectorAll('#tabela tr').forEach(tr=>{
+let selects = tr.querySelectorAll('select');
+dados.push([selects[0].value, selects[1].value]);
+});
+localStorage.setItem('escala', JSON.stringify(dados));
+alert('Salvo!');
+}
+
+// carregar
+let dadosSalvos = JSON.parse(localStorage.getItem('escala')||'[]');
+
+document.querySelectorAll('#tabela tr').forEach((tr,i)=>{
+let selects = tr.querySelectorAll('select');
+if(dadosSalvos[i]){
+selects[0].value = dadosSalvos[i][0];
+selects[1].value = dadosSalvos[i][1];
+}
+});
+
+</script>
+
+</tbody>
+</table>
+
+</div>
+
+</body>
+</html>
